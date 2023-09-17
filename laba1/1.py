@@ -9,6 +9,7 @@ radius = float(input("Введите радиус: "))
 h1 = float(input("Введите высоту1: "))
 h2 = float(input("Введите высоту2: "))
 
+# Проверка корректности данных
 if radius <= 0 or h1 < 0 or h2 < 0 or (h1 == 0 and h2 == 0):
     print("Ошибка! Некорректный ввод!")
 else:
