@@ -11,7 +11,8 @@ h1 = float(input("Введите высоту1: "))
 h2 = float(input("Введите высоту2: "))
 
 # Проверка корректности данных
-if radius <= 0 or h1 < 0 or h2 < 0 or (h1 == 0 and h2 == 0):
+if radius < 0 or h1 < 0 or h2 < 0 or (h1 == 0 and h2 == 0)\
+    or h1 > radius or h2 > radius:
     print("Ошибка! Некорректный ввод!")
 else:
     h = h1 + h2     # Найдем расстояние между двумя плоскостями
