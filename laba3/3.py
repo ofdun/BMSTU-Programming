@@ -108,12 +108,9 @@ if error is None:
     
     if (s_BCP + s_ACP + s_ABP - s_triangle) < eps:
         
-        height_to_AB = abs( vec_AB_y*p_x_cord - vec_AB_x*p_y_cord
-                       + b_x_cord*a_y_cord - b_y_cord*a_x_cord ) / side_AB
-        height_to_CB = abs( vec_CB_y*p_x_cord - vec_CB_x*p_y_cord
-                        + b_x_cord*c_y_cord - b_y_cord*c_x_cord) / side_CB
-        height_to_CA = abs( vec_CA_y*p_x_cord - vec_CA_x*p_y_cord
-                        + a_x_cord*c_y_cord - a_y_cord*c_x_cord) / side_CA
+        height_to_AB = s_ABP*2 / side_AB
+        height_to_CB = s_BCP*2 / side_CB
+        height_to_CA = s_ACP*2 / side_CA
         
         height_to_triangle = min(height_to_AB, height_to_CB, height_to_CA)
         
