@@ -64,6 +64,8 @@ if error is None:
     side_CB = ((c_x_cord - b_x_cord)**2 + (c_y_cord - b_y_cord)**2)**0.5
     side_CA = ((c_x_cord - a_x_cord)**2 + (c_y_cord - a_y_cord)**2)**0.5
     
+    answer += f"Стороны треугольника равны {side_AB}, {side_CA}, {side_CB}"
+    
     # Узнаем максимальную, минимальную и третью строку
     if side_AB >= side_CB:
         if side_CB >= side_CA:
