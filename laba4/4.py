@@ -12,10 +12,11 @@ from math import cos, pi, sqrt, inf
 # start_value = float(input('Введите начальное значение g: '))
 # end_value = float(input('Введите конечное значение g: '))
 # step = float(input('Введите шаг: '))
+# scale = float(input('Введите количество засечек: '))
 start_value = -2
 end_value = 0
 step = 0.5
-scale = 8 # засечки
+scale = 8 
 
 # Храним ответ в отдельной переменной
 answer = ''
@@ -32,6 +33,10 @@ elif step <= 0:
     answer = 'Шаг должен быть положительным'
 elif (start_value + step - end_value) > eps:
     answer = 'Внутри интервала должно быть хотя бы 2 шага (Заданный шаг слишком большой)'
+elif int(scale) != scale:
+    answer = 'Количество засечек должно быть целым'
+elif not(4 <= scale <= 8):
+    answer = 'Количество засечек должно быть от 4 до 8'
 
 # Если ошибок нет, то тогда выполнять программу
 if not answer:
