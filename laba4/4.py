@@ -22,7 +22,6 @@ answer = ''
 
 eps = 1e-8
 count_positive = 0 # считаем положительные значения a2 для доп задания
-first_elem_of_func = None # Найдем первое значение функции
 a1_max = -inf
 a1_min = inf
 
@@ -56,9 +55,8 @@ if not answer:
             count_positive += 1
         a1_max = max(a1_max, a1)
         a1_min = min(a1_min, a1)
-        if first_elem_of_func is None:
-            first_elem_of_func = a1
     
+    print("-" * 61)
     # Отделим график от таблицы
     print('\n\n')
     
@@ -69,9 +67,10 @@ if not answer:
     top_prompt = ' '*10
     
     current_scale = a1_min - scale_step
+    offset_top = int(10 * 8 / scale)
     for _ in range(scale):
         current_scale += scale_step
-        top_prompt += f"{current_scale:<10.5g}"
+        top_prompt += f"{current_scale:<{offset_top}.5g}"
     
     print(top_prompt)
     
