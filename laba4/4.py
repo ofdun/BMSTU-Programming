@@ -92,18 +92,23 @@ if not error:
 
     
     current_value = start_value - step
+    
     for _ in range(n):
         current_value += step
         a1 = current_value**3  + 6.1*current_value**2 - 35.4*current_value - 25.7
         point_min_median = abs(a1_min - a1)
         offset = int((point_min_median / median_of_func) * (width - 10))
         
-        if offset == ox_x_cord:
+        if ox_x_cord is not None:
+            if offset == ox_x_cord:
+                prompt = f"{current_value:<8.5g} |{' '*offset}*"
+            elif a1 > eps:
+                prompt = f"{current_value:<8.5g} |{' '*ox_x_cord}|{' '*(offset - ox_x_cord)}*"
+            elif a1 < eps:
+                prompt = f"{current_value:<8.5g} |{' '*offset}*{' '*(ox_x_cord - offset - 1)}|"
+        else:
             prompt = f"{current_value:<8.5g} |{' '*offset}*"
-        elif a1 > eps:
-            prompt = f"{current_value:<8.5g} |{' '*ox_x_cord}|{' '*(offset - ox_x_cord)}*"
-        elif a1 < eps:
-            prompt = f"{current_value:<8.5g} |{' '*offset}*{' '*(ox_x_cord - offset - 1)}|"    
+            
         print(prompt)
     
     addition_task_prompt  = f'\n\nПоложительных значений а2 на интервале\
