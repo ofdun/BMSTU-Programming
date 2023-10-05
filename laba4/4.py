@@ -9,14 +9,14 @@
 
 from math import cos, pi, sqrt, inf, ceil, copysign
 
-# start_value = float(input('Введите начальное значение g: '))
-# end_value = float(input('Введите конечное значение g: '))
-# step = float(input('Введите шаг: '))
-# scale = float(input('Введите количество засечек: '))
-start_value = -2
-end_value = 1
-step = 0.5
-scale = 8
+start_value = float(input('Введите начальное значение g: '))
+end_value = float(input('Введите конечное значение g: '))
+step = float(input('Введите шаг: '))
+scale = float(input('Введите количество засечек: '))
+# start_value = -2
+# end_value = 1
+# step = 0.5
+# scale = 8
 
 # Храним ответ в отдельной переменной
 error = ''
@@ -98,11 +98,16 @@ if not error:
         point_min_median = abs(a1_min - a1)
         offset = int((point_min_median / median_of_func) * (width - 10))
         
-        if a1 > eps:
+        if offset == ox_x_cord:
+            prompt = f"{current_value:<8.5g} |{' '*offset}*"
+        elif a1 > eps:
             prompt = f"{current_value:<8.5g} |{' '*ox_x_cord}|{' '*(offset - ox_x_cord)}*"
         elif a1 < eps:
-            prompt = f"{current_value:<8.5g} |{' '*offset}*{' '*(ox_x_cord - offset - 1)}|"
+            prompt = f"{current_value:<8.5g} |{' '*offset}*{' '*(ox_x_cord - offset - 1)}|"    
         print(prompt)
-        
+    
+    addition_task_prompt  = f'\n\nПоложительных значений а2 на интервале\
+ [{start_value}, {end_value}] с шагом {step} = {count_positive}'
+    print(addition_task_prompt)
 else:
     print(error)
