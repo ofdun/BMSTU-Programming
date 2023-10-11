@@ -43,7 +43,7 @@ scale = int(scale)
 
 # Если ошибок нет, то тогда выполнять программу
 if not error:
-    n = int((end_value - start_value) / step) + 1
+    n = int((end_value - start_value + eps) / step) + 1
     
     # Вывод таблицы по центру
     print("-" * 61)
@@ -58,13 +58,14 @@ if not error:
             - 35.4*current_value - 25.7
         a2 = current_value**2 - cos(pi*current_value)
         a3 = sqrt(a1**2 + a2**2)
-        print(f'| {current_value:^12.5g} | {a1:^12.5g}| {\
-            a2:^12.5g} | {a3:^12.5g} |')
+        print(f'| {current_value:^12.5g} | {a1:^12.5g}| {a2:^12.5g} | {a3:^12.5g} |')
+        if a1 > a1_max:
+            a1_max = a1
+        if a1 < a1_min:
+            a1_min = a1
         # для доп задания
         if a2 > eps:
             count_positive += 1
-        a1_max = max(a1_max, a1)
-        a1_min = min(a1_min, a1)
     
     print("-" * 61)
     # Отделим график от таблицы
@@ -96,29 +97,28 @@ if not error:
     
     current_value = start_value - step
     
-    for _ in range(n):
-        current_value += step
+    
+    for i in range(n):
+        current_value = start_value + step*i
         a1 = current_value**3  + 6.1*current_value**2\
             - 35.4*current_value - 25.7
         point_min_median = abs(a1_min - a1)
-        offset = int((point_min_median / median_of_func) * (width - 10))
+        offset = int((point_min_median / median_of_func) * (width - 12))
         
         if ox_x_cord is not None:
             if offset == ox_x_cord:
-                prompt = f"{current_value:<8.5g} |{' '*offset}*"
+                prompt = f"{current_value:<10.5g} |{' '*offset}*"
             elif a1 > eps:
-                prompt = f"{current_value:<8.5g} |{' '*ox_x_cord}\|{' '*\
-                    (offset - ox_x_cord)}*"
+                prompt = f"{current_value:<10.5g} |{' '*ox_x_cord}|{' '*(offset - ox_x_cord)}*"
             elif a1 < eps:
-                prompt = f"{current_value:<8.5g} |{' '*\
-                    offset}*{' '*(ox_x_cord - offset - 1)}|"
+                prompt = f"{current_value:<10.5g} |{' '*offset}*{' '*(ox_x_cord - offset - 1)}|"
         else:
-            prompt = f"{current_value:<8.5g} |{' '*offset}*"
+            prompt = f"{current_value:<10.5g} |{' '*offset}*"
             
         print(prompt)
     
-    addition_task_prompt  = f'\n\nПоложительных значений а2 на интервале[{\
-        start_value}, {end_value}] с шагом {step} = {count_positive}'
+    addition_task_prompt  = f'\n\nПоложительных значений а2 на\
+ интервале[{start_value}, {end_value}] с шагом {step} = {count_positive}'
     print(addition_task_prompt)
 else:
     print(error)
