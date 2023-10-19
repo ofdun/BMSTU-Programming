@@ -45,7 +45,7 @@ if num < 0:
 k = int(prime is True)
 max_ = k
 for i in range(1, n):
-    if arr[i] < arr[i - 1] and arr[i] < 0:
+    if arr[i] < arr[i - 1] and arr[i] < 0 and arr[i - 1] < 0:
         num = -arr[i]
         # Алгоритм проверки на простое число
         prime = num != 1
@@ -56,7 +56,10 @@ for i in range(1, n):
             else:
                 d += 1
         if prime:
-            k += 1
+            if k == 0:
+                k = 2
+            else:
+                k += 1
             if max_ < k:
                 max_ = k
                 max_index = i
@@ -66,8 +69,7 @@ for i in range(1, n):
         k = 0
 
 # -20 -5 -7 2 -11 3
-
 for i in range(max_index - max_ + 1, max_index + 1):
-    print(arr[i])
+    print(arr[i], end=' ')
 
 # print(f"Длина наибольшей убывающей последовательности отр. чисел равна: {max_}")
