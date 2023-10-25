@@ -1,4 +1,8 @@
-# Вариант 5
+# Автор: Калашников Елисей
+# Группа: ИУ7-15Б
+# Вариант: 5
+# Назначение программы: 
+# Удалить все отрицательные элементы целочисленного списка
 
 # Ввод длины списка
 while True:
@@ -24,7 +28,6 @@ for i in range(n):
             arr.append(elem)
             break
 
-
 k = 0
 for i in range(n):
     if arr[i] >= 0:
@@ -32,6 +35,7 @@ for i in range(n):
         k += 1        
 n = k
 
+print("Итоговый список: ", end='')
 for i in range(n):
     print(arr[i], end=' ')
 print()
