@@ -16,8 +16,6 @@ while True:
         break
 
 arr = []
-# Разница между заглавными и строчными в юникоде
-DIFF = 32
 
 # Ввод списка
 for i in range(n):
@@ -27,11 +25,9 @@ for i in range(n):
 for i in range(n):
     string = ''
     for char in arr[i]:
-        char_code = ord(char)
         # Если заглавная и не гласная  
-        if 65 <= char_code <= 97 and char not in "AEIOUY":
-            new_char = chr(char_code + DIFF)
-            string += new_char
+        if 65 <= ord(char) <= 97 and char not in "AEIOUY":
+            string += char.lower()
         else:
             string += char
     arr[i] = string
