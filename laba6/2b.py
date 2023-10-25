@@ -3,6 +3,7 @@
 # Назначение программы: 
 # 2b. Удалить элемент с заданным индексом алгоритмически.
 
+# Ввод длины списка
 while True:
     n = float(input('Введите длину списка: '))
     if n < 0:
@@ -15,6 +16,7 @@ while True:
 
 arr = []
 
+# Ввод списка
 for i in range(n):
     while True:
         elem = float(input(f"Введите {i + 1} элемент массива: "))
@@ -24,7 +26,8 @@ for i in range(n):
             elem = int(elem)
             arr.append(elem)
             break
-    
+
+# Ввод индекса
 while True:   
     index = float(input("Введите индекс, где нужно удалить элемент: "))
     if int(index) != index:
@@ -34,10 +37,14 @@ while True:
     else:
         index = int(index)
         break
-    
+
+# Удаляем элемент по индексу
 for i in range(index + 1, n):
     arr[i - 1] = arr[i]
 arr.pop()
 
+# Вывод списка
+print("Итоговый список: ", end='')
 for c in arr:
     print(c, end=' ')
+print()

@@ -3,6 +3,7 @@
 # Назначение программы: 
 # 1b. Добавить элемент в заданное место списка (по индексу) алгоритмически.
 
+# Ввод длины списка
 while True:
     n = float(input('Введите длину списка: '))
     if n < 0:
@@ -15,6 +16,7 @@ while True:
 
 arr = []
 
+# Ввод списка
 for i in range(n):
     while True:
         elem = float(input(f"Введите {i + 1} элемент массива: "))
@@ -25,6 +27,7 @@ for i in range(n):
             arr.append(elem)
             break
         
+# Ввод элемента 
 while True:
     elem = float(input(f"Введите элемент, который нужно добавить: "))
     if int(elem) != elem:
@@ -33,6 +36,7 @@ while True:
         elem = int(elem)
         break
     
+# Ввод индекса
 while True:   
     index = float(input("Введите индекс, куда нужно установить элемент: "))
     if int(index) != index:
@@ -43,10 +47,14 @@ while True:
         index = int(index)
         break
     
+# Добавляем элемент по индексу
 arr.append(None)
 for i in range(n, index - 1, -1):
     arr[i] = arr[i - 1]
 arr[index] = elem
     
+# Вывод списка
+print("Итоговый список: ", end='')
 for c in arr:
     print(c, end=' ')
+print()

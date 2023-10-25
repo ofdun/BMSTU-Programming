@@ -5,6 +5,7 @@
 # 4. Найти наиболее длинную непрерывную Убывающая последовательность
 # отрицательных чисел, модуль которых является простым числом.
 
+# Ввод длины списка
 while True:
     n = float(input('Введите длину списка: '))
     if n < 0:
@@ -17,11 +18,12 @@ while True:
 
 arr = []
 
+# Ввод списка
 for i in range(n):
     while True:
         elem = float(input(f"Введите {i + 1} элемент массива: "))
         if int(elem) != elem:
-            print("Значение должно быть цесочисленным")
+            print("Значение должно быть целочисленным")
         else:
             elem = int(elem)
             arr.append(elem)
@@ -41,9 +43,10 @@ if num < 0:
             prime = False
         else:
             d += 1
-
+            
+# k = 1 если первое число удовл. условиям, иначе k=0
 k = int(prime is True)
-max_ = k
+max_posl = k
 for i in range(1, n):
     if arr[i] < arr[i - 1] and arr[i] < 0 and arr[i - 1] < 0:
         num = -arr[i]
@@ -60,16 +63,16 @@ for i in range(1, n):
                 k = 2
             else:
                 k += 1
-            if max_ < k:
-                max_ = k
+            if max_posl < k:
+                max_posl = k
                 max_index = i
         else:
             k = 0
     else:
         k = 0
 
-# -20 -5 -7 2 -11 3
-for i in range(max_index - max_ + 1, max_index + 1):
+# Вывод
+print("Наибольшая убывающая последовательность отрицательных чисел:", end=' ')
+for i in range(max_index - max_posl + 1, max_index + 1):
     print(arr[i], end=' ')
-
-# print(f"Длина наибольшей убывающей последовательности отр. чисел равна: {max_}")
+print()

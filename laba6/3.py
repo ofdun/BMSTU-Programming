@@ -3,6 +3,7 @@
 # Назначение программы: 
 # 3. Найти значение K-го экстремума в списке.
 
+# Ввод длины списка
 while True:
     n = float(input('Введите длину списка: '))
     if n < 0:
@@ -15,6 +16,7 @@ while True:
 
 arr = []
 
+# Ввод списка
 for i in range(n):
     while True:
         elem = float(input(f"Введите {i + 1} элемент массива: "))
@@ -25,6 +27,7 @@ for i in range(n):
             arr.append(elem)
             break
     
+# Ввод экстремума
 while True:   
     k = float(input("Введите K-ый экстремум, который надо найти: "))
     if int(k) != k:
@@ -33,20 +36,24 @@ while True:
         print("K-ый экстремум должен быть больше нуля, но меньше длины списка")
     else:
         k = int(k)
+        extremum_num = k
         break
 answer = ""
 
+# Вычисление экстремума
 for i in range(1, n - 1):
+    # Если k == 0, значит мы прошли экстремум
     if not k:
         answer = arr[i - 1]
         break
+    # Если экстремум найден, то уменьшаем k
     elif arr[i] > arr[i - 1] and arr[i] > arr[i + 1]:
         k -= 1
     elif arr[i] < arr[i - 1] and arr[i] < arr[i + 1]:
         k -= 1
         
 if k == 0 and not answer:
-    answer = arr[-2]
+    answer = f"{extremum_num} экстремум равен {arr[-2]}"
 elif not answer:
     answer = "Такого экстремума нет в списке"
 

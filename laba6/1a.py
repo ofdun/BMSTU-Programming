@@ -4,6 +4,7 @@
 # 1a. Добавить элемент в заданное место списка (по индексу) с использованием
 # любых средств Python.
 
+# Ввод длины списка
 while True:
     n = float(input('Введите длину списка: '))
     if n < 0:
@@ -16,6 +17,7 @@ while True:
 
 arr = []
 
+# Ввод списка
 for i in range(n):
     while True:
         elem = float(input(f"Введите {i + 1} элемент массива: "))
@@ -25,7 +27,8 @@ for i in range(n):
             elem = int(elem)
             arr.append(elem)
             break
-        
+       
+# Ввод элемента 
 while True:
     elem = float(input(f"Введите элемент, который нужно добавить: "))
     if int(elem) != elem:
@@ -34,6 +37,7 @@ while True:
         elem = int(elem)
         break
     
+# Ввод индекса
 while True:   
     index = float(input("Введите индекс, куда нужно установить элемент: "))
     if int(index) != index:
@@ -44,7 +48,11 @@ while True:
         index = int(index)
         break
     
+# Добавляем элемент по индексу
 arr.insert(index, elem)
 
+# Вывод списка
+print("Итоговый список: ", end='')
 for c in arr:
     print(c, end=' ')
+print()
