@@ -20,30 +20,16 @@ for row in range(n_rows):
         matrix[row][column] = int(input(f"Введите {row + 1} элемент {column + 1} строки: "))
     print("-" * 30)
         
-count_max_neg = float('+inf')
-count_min_neg = float('-inf')
-count_max_neg_index = 0
-count_min_neg_index = 0
-
+max_row = 0
+max_number = 0
 for i in range(n_rows):
-    count_neg = 0
+    k = 0
     for j in range(n_columns):
-        if matrix[i][j] < 0:
-            count_neg += 1
-            
-    if count_min_neg < count_neg:
-        count_min_neg = count_neg
-        count_min_neg_index = i
-        
-    if count_max_neg > count_neg:
-        count_max_neg_index = i
-        count_max_neg = count_neg
+        if matrix[i][j] == 0:
+            k += 1
+    if k > max_number:
+        max_number = k
+        max_row = i
 
-matrix[count_max_neg_index], matrix[count_min_neg_index] = \
-    matrix[count_min_neg_index], matrix[count_max_neg_index]        
 
-print('Итоговая матрица: ')
-for m in matrix:
-    for elem in m:
-        print(f"{elem:^5}", end=' ')
-    print()
+print(f"Строка с наибольшим количеством нулей: {matrix[max_row]}")

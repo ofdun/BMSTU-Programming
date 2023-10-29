@@ -19,29 +19,28 @@ for row in range(n_rows):
     for column in range(n_columns):
         matrix[row][column] = int(input(f"Введите {row + 1} элемент {column + 1} строки: "))
     print("-" * 30)
-        
-count_max_neg = float('+inf')
-count_min_neg = float('-inf')
-count_max_neg_index = 0
-count_min_neg_index = 0
+    
+max_column = min_column = 0
+max_number_column = min_number_column = 0
 
-for i in range(n_rows):
-    count_neg = 0
-    for j in range(n_columns):
-        if matrix[i][j] < 0:
-            count_neg += 1
+for j in range(n_columns):
+    sum_ = 0
+    for i in range(n_rows):
+        sum_ += matrix[i][j]
             
-    if count_min_neg < count_neg:
-        count_min_neg = count_neg
-        count_min_neg_index = i
+    if min_number_column < sum_:
+        min_number_column = sum_
+        min_column = j
         
-    if count_max_neg > count_neg:
-        count_max_neg_index = i
-        count_max_neg = count_neg
-
-matrix[count_max_neg_index], matrix[count_min_neg_index] = \
-    matrix[count_min_neg_index], matrix[count_max_neg_index]        
-
+    if max_number_column > sum_:
+        max_number_column = j
+        max_column = sum_
+        
+print(min_column, max_column)
+for i in range(n_rows):
+    matrix[i][min_column], matrix[i][max_column] = \
+        matrix[i][max_column], matrix[i][min_column]
+        
 print('Итоговая матрица: ')
 for m in matrix:
     for elem in m:

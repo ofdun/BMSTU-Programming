@@ -20,30 +20,18 @@ for row in range(n_rows):
         matrix[row][column] = int(input(f"Введите {row + 1} элемент {column + 1} строки: "))
     print("-" * 30)
         
-count_max_neg = float('+inf')
-count_min_neg = float('-inf')
-count_max_neg_index = 0
-count_min_neg_index = 0
-
-for i in range(n_rows):
-    count_neg = 0
-    for j in range(n_columns):
-        if matrix[i][j] < 0:
-            count_neg += 1
-            
-    if count_min_neg < count_neg:
-        count_min_neg = count_neg
-        count_min_neg_index = i
-        
-    if count_max_neg > count_neg:
-        count_max_neg_index = i
-        count_max_neg = count_neg
-
-matrix[count_max_neg_index], matrix[count_min_neg_index] = \
-    matrix[count_min_neg_index], matrix[count_max_neg_index]        
-
-print('Итоговая матрица: ')
-for m in matrix:
-    for elem in m:
-        print(f"{elem:^5}", end=' ')
+max_column = 0
+max_number = 0
+for j in range(n_columns):
+    k = 0
+    for i in range(n_rows):
+        print(matrix[i][j], end=' ')
+        if matrix[i][j] % 2 == 0 or matrix[i][j] == 1:
+            k += 1
+    if k > max_number:
+        max_number = k
+        max_column = j
     print()
+print("Cтолбец с наибольшим количеством чисел, являющимися степенью 2: ", end='')
+for i in range(n_rows):
+    print(matrix[i][max_column], end=' ')
