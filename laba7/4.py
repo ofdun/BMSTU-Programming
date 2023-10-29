@@ -2,7 +2,7 @@
 # Группа: ИУ7-15Б
 # Вариант: 3
 # Назначение программы: 
-# Поиск элемента в списке строк с максимальным количеством пробелов подряд
+# Замена всех заглавных согласных английских букв на строчные
 
 # Ввод длины списка
 while True:
@@ -26,7 +26,7 @@ for i in range(n):
     string = ''
     for char in arr[i]:
         # Если заглавная и не гласная  
-        if 65 <= ord(char) <= 97 and char not in "AEIOUY":
+        if char.isupper() and char not in "AEIOUY":
             string += char.lower()
         else:
             string += char

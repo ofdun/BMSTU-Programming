@@ -29,6 +29,8 @@ for i in range(n):
             break
         
 k = 0
+# k = Количество элементов для удвоения
+# Добавляем пустые элементы для новых элементов
 for i in range(n):
     if arr[i] < 0:
         arr.append(None)
