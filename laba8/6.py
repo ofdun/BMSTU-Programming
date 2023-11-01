@@ -1,3 +1,10 @@
+# Автор: Калашников Елисей
+# Группа: ИУ7-15Б
+# Вариант: 5
+# Назначение программы: 
+# Выполнить транспонирование квадратной матрицы.
+
+
 while True:
     n = float(input('Введите количество строк и столбцов: '))
     if 0 < n <= int(n):
@@ -10,17 +17,17 @@ matrix = [[0] * n for _ in range(n) ]
 print("-" * 30)
 for row in range(n):
     for column in range(n):
-        matrix[row][column] = int(input(f"Введите {row + 1} элемент {column + 1} строки: "))
+        matrix[column][row] = int(input(f"Введите {row + 1} элемент {column + 1} строки: "))
     print("-" * 30)
     
-for m in matrix:
-    for elem in m:
-        print(f"{elem:^5}", end=' ')
-    print()
+# for m in matrix:
+#     for elem in m:
+#         print(f"{elem:^5}", end=' ')
+#     print()
     
-for i in range(n):
-    for j in range(i, n):
-        matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+# for i in range(n):
+#     for j in range(i, n):
+#         matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
         
 print('Итоговая матрица: ')
 for m in matrix:
