@@ -5,36 +5,114 @@
 from typing import Callable, Tuple
 
 def f(x: float) -> float:
+    """
+    Фунцкия f(x)
+    """
     return x**2
 
 
 def F(x: float) -> float:
+    """
+    Первообразная функция для f(x)
+    """
     return x**3/3
 
 
 def integralUsingNewtonLeibnizMethod(primitiveFunc: Callable, start: float, end: float) -> float:
+    """
+    Вычисление интеграла с помощью формулы Ньютона-Лейбница
+    """
     return primitiveFunc(end) - primitiveFunc(start)
 
 
 def inputIsFloat(input_str: str) -> [float, bool]:
+    """
+    Возвращает (число, True) если строка является float,
+    иначе возвращает (0, False)
+    """
     number = 0
-    try:
-        number = float(input_str)
-    except ValueError:
+    digits = frozenset('1234567890')
+    symbols = frozenset('+-.')
+    was_dot = False
+    start_point = 0
+    arr = input_str.split()
+    blank_count = input_str.count(' ')
+    was_number = False
+    was_e = False
+
+
+    if len(input_str) - blank_count > 2 and len(arr) == 1 and arr[0][0] in '+-' and arr[0][1] == '.' and arr[0][2] in digits:
+        start_point = 2
+        was_number = True
+
+    if len(arr) > 1:
         return number, False
-    return number, True
+    
+    elif len(input_str) == 1 and input_str not in digits:
+        return number, False 
+    
+    else:
+        for i in range(start_point, len(input_str) - blank_count):
+            if i == 0:
+                if arr[0][i] not in symbols and arr[0][i] not in digits:
+                    return number, False 
+                elif arr[0][i] == '.':
+                    was_dot = True
+                elif arr[0][i] in digits:
+                    was_number = True
+            
+            else:
+                if arr[0][i] in digits:
+                    was_number = True
+
+                if arr[0][i] in 'eE':
+                    if i == len(input_str) - blank_count or was_number is False or was_e:
+                        return number, False 
+                    else:
+                        was_dot = True
+                        was_number = False
+                        was_e = True
+                        
+                elif arr[0][i] not in digits and arr[0][i] not in symbols:
+                    return number, False
+                
+
+                if arr[0][i] in symbols:
+                    if arr[0][i] == '.' and was_dot:
+                        return number, False 
+                    
+                    elif arr[0][i] == '.' and arr[0][i-1] in symbols:
+                        return number, False
+                    
+                    elif arr[0][i] == '.':
+                        was_dot = True
+
+                    else:
+                        if arr[0][i-1] not in 'eE':
+                            return number, False
+    
+    if was_number:
+        return float(input_str), True
+    else:
+        return number, False
 
 
 def inputIsInt(input_str: str) -> [int, bool]:
-    number = 0
-    try:
-        number = int(input_str)
-    except ValueError:
-        return number, False
-    return number, True
+    """
+    Возвращает (число, True) если оно является int,
+    иначе возвращает (0, False)
+    """
+    number, validated = inputIsFloat(input_str)
+    if validated:
+        if number == int(number):
+            return int(number), True
+    return number, False
     
 
 def inputFloat(inputMsg: str) -> float:
+    """
+    Ввод float числа
+    """
     while True:
         number, validated = inputIsFloat(input(inputMsg))
         if validated:
@@ -43,17 +121,24 @@ def inputFloat(inputMsg: str) -> float:
 
 
 def inputEvenInt(inputMsg: str) -> int:
+    """
+    Ввод четного целого числа
+    """
     while True:
         number, validated = inputIsInt(input(inputMsg))
         if validated:
             if number % 2 == 0:
                 return number 
             print("Введенное значение должно быть четным!")
+            continue
         print("Введенное значение должно быть целым числом!")
 
 
 def intergalUsingParabolaMethod(start: float, end: float,
                                n: int) -> float:
+    """
+    Вычисление интеграла с помощью метода парабол ( формулы Симпсона )
+    """
     if n % 2 != 0:
         return -1
     
@@ -76,6 +161,9 @@ def intergalUsingParabolaMethod(start: float, end: float,
         
 def integralUsingMiddleSquareMethod(start: float, end: float,
                                     n: int) -> float:
+    """
+    Вычисление интеграла с помощью метода срединных прямоугольников
+    """
     integral = 0
     x = start
     step = (end - start) / n
@@ -119,6 +207,10 @@ def printTable(rectangleIntegrals: Tuple[float, float],
 def printInaccuraciesTable(rectangleMethodInaccuracies: Tuple[float, float],
                            parabolaMethodInaccuracies: Tuple[float, float],
                            n1: int, n2: int, absolute: bool=True) -> None:
+    """
+    Выводит таблицу абсолютных погрешностей если absolute=True,
+    иначе выводит таблицу относительных погрешностей
+    """
     if absolute:
         heading = "Таблица абсолютных погрешностей"
     else:
@@ -152,6 +244,10 @@ def printInaccuraciesTable(rectangleMethodInaccuracies: Tuple[float, float],
     
 
 def correctIntegral(method: str, start: float, end: float, eps: float) -> Tuple[float, int]:
+    """
+    Узнает количество итераций для вычисления интеграла с заданной точностью
+    Принимает два метода: 'Метод парабол' и 'Метод срединных прямоугольников'
+    """
     n = 2
     if method == 'Метод парабол':
         integralFunc = intergalUsingParabolaMethod
@@ -169,6 +265,9 @@ def correctIntegral(method: str, start: float, end: float, eps: float) -> Tuple[
 
 
 def printCorrectedIntegral(integral: float, n: int, eps: float, method: str) -> None:
+    """
+    Выводит "скорректированный" интеграл
+    """
     print(f"Наиболее плохой метод: {method}")
     print(f"Вычисленное значение интеграла с точностью {eps} = \
 {integral:.5g} было достигнуто за {n} интераций")
