@@ -30,74 +30,93 @@ def inputIsFloat(input_str: str) -> [float, bool]:
     Возвращает (число, True) если строка является float,
     иначе возвращает (0, False)
     """
+    # Вводим все переменные
     number = 0
-    digits = frozenset('1234567890')
-    symbols = frozenset('+-.')
-    was_dot = False
-    start_point = 0
-    arr = input_str.split()
-    blank_count = input_str.count(' ')
-    was_number = False
+    input_str = str(input_str)
+    input_str = input_str.strip()
+    digits = set('1234567890')
+    characters = set('+-')
+    ten_degree = set('eE')
     was_e = False
+    dot_count = 0
+    e_count = 0
+    i = 0
 
+    # Обрабатываем длину
+    if len(input_str) == 0:
+        return number, False
 
-    if len(input_str) - blank_count > 2 and len(arr) == 1 and arr[0][0] in '+-' and arr[0][1] == '.' and arr[0][2] in digits:
-        start_point = 2
-        was_number = True
-
-    if len(arr) > 1:
+    # Обрабатываем первый элемент
+    if input_str[0] not in digits and input_str[0] not in characters and input_str[0] != '.':
+        return number, False
+    elif input_str[0] in characters:
+        i += 1
+    
+    # Если длина 1 и элементы '+', '-' или '.'
+    if len(input_str) == 1 and (input_str[0] in characters or input_str[0] == '.'):
         return number, False
     
-    elif len(input_str) == 1 and input_str not in digits:
-        return number, False 
-    
-    else:
-        for i in range(start_point, len(input_str) - blank_count):
-            if i == 0:
-                if arr[0][i] not in symbols and arr[0][i] not in digits:
-                    return number, False 
-                elif arr[0][i] == '.':
-                    was_dot = True
-                elif arr[0][i] in digits:
-                    was_number = True
-            
+    # Если последний элемент 'e', '+' или '-'
+    if input_str[len(input_str) - 1] in ten_degree or input_str[len(input_str) - 1] in characters:
+        return number, False
+
+    # Случай '.e_abc' и '+.e_abc'
+    if (input_str[0] == '.' and input_str[1] in ten_degree) or (len(input_str) > 2\
+        and input_str[0] in characters and input_str[1] == '.' and input_str[2] in ten_degree):
+        return number, False
+
+    # Случай 'abc.'
+    if input_str[len(input_str) - 1] == '.' and input_str[len(input_str) - 2] not in digits:
+        return number, False
+
+    # Проходимся циклом
+    while i != len(input_str) - 1:
+
+        # Отбираем только все цифры, '.', '+', '-' и 'e'
+        if input_str[i] not in digits and input_str[i] not in characters \
+            and input_str[i] not in ten_degree and input_str[i] != '.':
+            return number, False
+        
+        # Если попадется '.' и '+', '-'
+        if input_str[i] == '.':
+            dot_count += 1
+        elif input_str[i] in characters:
+            return number, False
+        
+        # Если находим точку после 'e'
+        if was_e == True and dot_count > 0:
+            return number, False
+        
+        # Обрабатываем 'e'
+        if input_str[i] in ten_degree:
+            e_count += 1
+            was_e = True
+
+            # Если перед 'e' есть цифра или '.'
+            if input_str[i - 1] not in digits and input_str[i - 1] != '.':
+                return number, False
+
+            # Разделяем обработку на 'до e' и 'после e'
+            if e_count > 1 or dot_count > 1:
+                return number, False
             else:
-                if arr[0][i] in digits:
-                    was_number = True
+                dot_count = 0
+            
+            # Если после 'e' есть '+' или '-'
+            if input_str[i + 1] in characters:
+                i += 1
 
-                if arr[0][i] in 'eE':
-                    if i == len(input_str) - blank_count or was_number is False or was_e:
-                        return number, False 
-                    else:
-                        was_dot = True
-                        was_number = False
-                        was_e = True
-                        
-                elif arr[0][i] not in digits and arr[0][i] not in symbols:
-                    return number, False
-                
-
-                if arr[0][i] in symbols:
-                    if arr[0][i] == '.' and was_dot:
-                        return number, False 
-                    
-                    elif arr[0][i] == '.' and arr[0][i-1] in symbols:
-                        return number, False
-                    
-                    elif arr[0][i] == '.':
-                        was_dot = True
-
-                    else:
-                        if arr[0][i-1] not in 'eE':
-                            return number, False
+        # Обрабатываем случай 'abc_e_dfg.'
+        if e_count > 0 and input_str[len(input_str) - 1] == '.':
+            return number, False
+        
+        i += 1      # Инкрементируем счетчик
     
-    if was_number:
-        return float(input_str), True
-    else:
-        return number, False
+    number = float(input_str)
+    return number, True    # Выход
 
 
-def inputIsInt(input_str: str) -> [int, bool]:
+def inputIsInt(input_str: str) -> (int, bool):
     """
     Возвращает (число, True) если оно является int,
     иначе возвращает (0, False)
@@ -273,8 +292,16 @@ def printCorrectedIntegral(integral: float, n: int, eps: float, method: str) -> 
 {integral:.5g} было достигнуто за {n} интераций")
 
 
+def inputStartAndEnd() -> Tuple[float, float]:
+    while True:
+        start, end = inputFloat("Введите старт: "), inputFloat("Введите конец: ")
+        if end > start:
+            return start, end
+        print("Ошибка! Конец отрезка интегрирования меньше начала!")
+
+
 def main():
-    start, end = inputFloat("Введите старт: "), inputFloat("Введите конец: ")
+    start, end = inputStartAndEnd()
     # Метод парабол не работает при нечетных n => запросим только четные n
     n1, n2 = inputEvenInt("Введите N1: "), inputEvenInt("Введите N2: ")
     eps = inputFloat("Введите погрешность: ")
@@ -290,7 +317,8 @@ def main():
     parabolaMethodInaccuracies = (compareIntegrals(parabolaIntegrals[0], trueIntegral),
                                      compareIntegrals(parabolaIntegrals[1], trueIntegral))
     
-    if rectanglesMethodInaccuracies[0] < parabolaMethodInaccuracies[0]:
+    if min(rectanglesMethodInaccuracies[0][1], rectanglesMethodInaccuracies[1][1]) < min(
+        parabolaMethodInaccuracies[0][1], parabolaMethodInaccuracies[1][1]):
         worseMethod = "Метод парабол"
     else:
         worseMethod = "Метод срединных прямоугольников"
