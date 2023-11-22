@@ -8,14 +8,14 @@ def f(x: float) -> float:
     """
     Фунцкия f(x)
     """
-    return x**2
+    return x**3
 
 
 def F(x: float) -> float:
     """
     Первообразная функция для f(x)
     """
-    return x**3/3
+    return x**4/4
 
 
 def integralUsingNewtonLeibnizMethod(primitiveFunc: Callable, start: float, end: float) -> float:
@@ -156,7 +156,7 @@ def inputEvenInt(inputMsg: str) -> int:
 def intergalUsingParabolaMethod(start: float, end: float,
                                n: int) -> float:
     """
-    Вычисление интеграла с помощью метода парабол ( формулы Симпсона )
+    Вычисление интеграла с помощью метода парабол ( формулы Котеса )
     """
     if n % 2 != 0:
         return -1
@@ -186,17 +186,20 @@ def integralUsingMiddleSquareMethod(start: float, end: float,
     integral = 0
     x = start
     step = (end - start) / n
-    for i in range(n):
+    for _ in range(n):
         height = f(x + step / 2)
         integral += step * height
-        x = start + step * i
+        x += step
     return integral
 
 
 def compareIntegrals(it1: float, it2: float) -> Tuple[float, float]:
     """
     Находит абсолютную и относительную погрешность
+    Возвращает (float, -1) если невозможно найти относительную погрешность
     """
+    if it2 == 0:
+        return abs(it2 - it1), -1
     return abs(it2 - it1), abs(1 - (it1 / it2))
 
 
@@ -297,7 +300,7 @@ def inputStartAndEnd() -> Tuple[float, float]:
         start, end = inputFloat("Введите старт: "), inputFloat("Введите конец: ")
         if end > start:
             return start, end
-        print("Ошибка! Конец отрезка интегрирования меньше начала!")
+        print("Ошибка! Конец отрезка интегрирования должне быть больше начала!")
 
 
 def main():
@@ -312,24 +315,41 @@ def main():
     parabolaIntegrals = (intergalUsingParabolaMethod(start, end, n1),
                        intergalUsingParabolaMethod(start, end, n2))
     
+    printTable(rectanglesIntegrals, parabolaIntegrals, n1, n2)
+    
     rectanglesMethodInaccuracies = (compareIntegrals(rectanglesIntegrals[0], trueIntegral),
                                        compareIntegrals(rectanglesIntegrals[1], trueIntegral))
     parabolaMethodInaccuracies = (compareIntegrals(parabolaIntegrals[0], trueIntegral),
                                      compareIntegrals(parabolaIntegrals[1], trueIntegral))
     
-    if min(rectanglesMethodInaccuracies[0][1], rectanglesMethodInaccuracies[1][1]) < min(
-        parabolaMethodInaccuracies[0][1], parabolaMethodInaccuracies[1][1]):
-        worseMethod = "Метод парабол"
-    else:
-        worseMethod = "Метод срединных прямоугольников"
-    
-    correctedIntegral, n3 = correctIntegral(worseMethod, start, end, eps)
-    
-    printTable(rectanglesIntegrals, parabolaIntegrals, n1, n2)
-    for absolute in True, False:
+    if rectanglesMethodInaccuracies[1][1] == -1 or rectanglesMethodInaccuracies[0][1] == -1 or\
+        parabolaMethodInaccuracies[1][1] == -1 or parabolaMethodInaccuracies[0][1] == -1:
+        
+        if min(rectanglesMethodInaccuracies[0][0], rectanglesMethodInaccuracies[1][0]) < min(
+            parabolaMethodInaccuracies[0][0], parabolaMethodInaccuracies[1][0]):
+            worseMethod = "Метод парабол"
+        else:
+            worseMethod = "Метод срединных прямоугольников"
+        
+        correctedIntegral, n3 = correctIntegral(worseMethod, start, end, eps)
         printInaccuraciesTable(rectanglesMethodInaccuracies,
-                                parabolaMethodInaccuracies,
-                                n1, n2, absolute)
+                                    parabolaMethodInaccuracies,
+                                    n1, n2, True)
+        print("Невозможно вычислить относительные погрешности!")
+    else:
+        if min(rectanglesMethodInaccuracies[0][0], rectanglesMethodInaccuracies[1][0]) < min(
+            parabolaMethodInaccuracies[0][0], parabolaMethodInaccuracies[1][0]):
+            worseMethod = "Метод парабол"
+        else:
+            worseMethod = "Метод срединных прямоугольников"
+        
+        correctedIntegral, n3 = correctIntegral(worseMethod, start, end, eps)
+    
+    
+        for absolute in True, False:
+            printInaccuraciesTable(rectanglesMethodInaccuracies,
+                                    parabolaMethodInaccuracies,
+                                    n1, n2, absolute)
     
     printCorrectedIntegral(correctedIntegral, n3, eps, worseMethod)
     
