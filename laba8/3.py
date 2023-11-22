@@ -4,13 +4,17 @@
 # Назначение программы: 
 # Найти столбец, имеющий наибольшее количество чисел, являющихся степенями 2.
 
+from math import log2
+
+# Ввод кол-ва строк
 while True:
     n_rows = float(input('Введите количество строк: '))
     if 0 < n_rows <= int(n_rows):
         n_rows = int(n_rows)
         break
     print("Количество строк должно быть натуральным")
-    
+
+# Ввод кол-ва столбцов  
 while True:
     n_columns = float(input('Введите количество столбцов: '))
     if 0 < n_columns <= int(n_columns):
@@ -20,6 +24,7 @@ while True:
     
 matrix = [[0] * n_columns for _ in range(n_rows) ]
 
+# Ввод матрицы поэлементно
 print("-" * 30)
 for row in range(n_rows):
     for column in range(n_columns):
@@ -28,11 +33,11 @@ for row in range(n_rows):
         
 max_column = 0
 max_number = 0
+# Считаем макс. кол-во степеней 2 в одном столбце
 for j in range(n_columns):
     k = 0
     for i in range(n_rows):
-        print(matrix[i][j], end=' ')
-        if matrix[i][j] % 2 == 0 or matrix[i][j] == 1:
+        if matrix[i][j] & (matrix[i][j] - 1) == 0:
             k += 1
     if k > max_number:
         max_number = k

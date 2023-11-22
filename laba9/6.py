@@ -26,14 +26,14 @@ A = [[0] * columns for _ in range(n) ]
 print("-" * 30)
 for row in range(n):
     for column in range(columns):
-        A[row][column] = int(input(f"Введите {row + 1} элемент {column + 1} строки матрицы A: "))
+        A[row][column] = float(input(f"Введите {row + 1} элемент {column + 1} строки матрицы A: "))
     print("-" * 30)
 
 B = [[0] * columns for _ in range(n) ]
 
 for row in range(n):
     for column in range(columns):
-        B[row][column] = int(input(f"Введите {row + 1} элемент {column + 1} строки матрицы B: "))
+        B[row][column] = float(input(f"Введите {row + 1} элемент {column + 1} строки матрицы B: "))
     print("-" * 30)
 
 C = [[0] * columns for _ in range(n) ]

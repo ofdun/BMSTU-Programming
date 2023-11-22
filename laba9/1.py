@@ -26,12 +26,8 @@ D = []
 for i in range(lenD):
     while True:
         elem = float(input(f"Введите {i + 1} элемент массива D: "))
-        if int(elem) != elem:
-            print("Значение должно быть цесочисленным")
-        else:
-            elem = int(elem)
-            D.append(elem)
-            break
+        D.append(elem)
+        break
 
 # Ввод длины массива F
 while True:
@@ -50,12 +46,9 @@ F = []
 for i in range(lenF):
     while True:
         elem = float(input(f"Введите {i + 1} элемент массива F: "))
-        if int(elem) != elem:
-            print("Значение должно быть цесочисленным")
-        else:
-            elem = int(elem)
-            F.append(elem)
-            break
+        elem = int(elem)
+        F.append(elem)
+        break
 
 A = [[0]*lenF for _ in range(lenD)]
 
@@ -64,7 +57,7 @@ AV = [0] * lenD
 # Массив чисел, меньших среднего арифметического
 L = [0] * lenD
 
-# Заполняем матрицу А и сразу же считаем среднее арифм. строки
+# Заполняем матрицу А и сразу же считаем среднее арифм. пол. чисел
 for j in range(lenD):
     counter = 0
     sum_ = 0

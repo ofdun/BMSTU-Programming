@@ -27,7 +27,7 @@ D = [[0] * n_columns_D for _ in range(n_rows_D) ]
 print("-" * 30)
 for row in range(n_rows_D):
     for column in range(n_columns_D):
-        D[row][column] = int(input(f"Введите {row + 1} элемент {column + 1} строки матрицы D: "))
+        D[row][column] = float(input(f"Введите {row + 1} элемент {column + 1} строки матрицы D: "))
     print("-" * 30)
 
 # Ввод матрицы Z
@@ -54,7 +54,7 @@ Z = [[0] * n_columns_Z for _ in range(n_rows_Z) ]
 print("-" * 30)
 for row in range(n_rows_Z):
     for column in range(n_columns_Z):
-        Z[row][column] = int(input(f"Введите {row + 1} элемент {column + 1} строки матрицы Z: "))
+        Z[row][column] = float(input(f"Введите {row + 1} элемент {column + 1} строки матрицы Z: "))
     print("-" * 30)
 
 # Вывод матрицы Z
@@ -80,21 +80,17 @@ print("-"*(n_columns_D*12 + (n_columns_D + 1)))
 # Объявим массив G
 G = [0] * n_rows_D
 
+max_elem = 0
+# Подсчитаем кол-во эл. в каждой строке D превосходящее сумму ряда в Z
+# Также найдем максимум
 # Заполним массив G суммами строк матрицы Z
 for i in range(n_rows_Z):
     sum_ = 0
     for j in range(n_columns_Z):
         sum_ += Z[i][j]
-    G[i] = sum_
-
-max_elem = 0
-
-# Подсчитаем кол-во эл. в каждой строке D превосходящее сумму ряда в Z
-# Также найдем максимум
-for i in range(n_rows_D):
     counter = 0
     for j in range(n_columns_D):
-        if D[i][j] > G[i]:
+        if D[i][j] > sum_:
             counter += 1
     if counter > max_elem:
         max_elem = counter

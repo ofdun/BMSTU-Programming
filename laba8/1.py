@@ -4,13 +4,15 @@
 # Назначение программы: 
 # Найти строку, имеющую наибольшее количество нулевых элементов.
 
+# Ввод кол-ва строк
 while True:
     n_rows = float(input('Введите количество строк: '))
     if 0 < n_rows <= int(n_rows):
         n_rows = int(n_rows)
         break
     print("Количество строк должно быть натуральным")
-    
+
+# Ввод кол-ва столбцов  
 while True:
     n_columns = float(input('Введите количество столбцов: '))
     if 0 < n_columns <= int(n_columns):
@@ -20,12 +22,14 @@ while True:
     
 matrix = [[0] * n_columns for _ in range(n_rows) ]
 
+# Ввод матрицы поэлементно
 print("-" * 30)
 for row in range(n_rows):
     for column in range(n_columns):
         matrix[row][column] = int(input(f"Введите {row + 1} элемент {column + 1} строки: "))
     print("-" * 30)
         
+# Поиск строки с наиб. кол-вом нулей
 max_row = 0
 max_number = 0
 for i in range(n_rows):

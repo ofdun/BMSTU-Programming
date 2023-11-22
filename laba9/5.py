@@ -24,7 +24,12 @@ D = [[0] * n_columns_D for _ in range(n_rows_D) ]
 print("-" * 30)
 for row in range(n_rows_D):
     for column in range(n_columns_D):
-        D[row][column] = input(f"Введите {row + 1} элемент {column + 1} строки матрицы D: ")
+        while True:
+            elem = input(f"Введите {row + 1} элемент {column + 1} строки матрицы D: ")
+            if len(elem) == 1:
+                D[row][column] = elem
+                break
+            print("Введите один символ!")
     print("-" * 30)
 
 print("Исходная матрица D: ")
@@ -38,13 +43,8 @@ print("-"*(n_columns_D*12 + (n_columns_D + 1)))
 
 for i in range(n_rows_D):
     for j in range(n_columns_D):
-        new_str = ''
-        for c in D[i][j]:
-            if c in "aoieuyAOIEUY":
-                new_str += '.'
-            else:
-                new_str += c
-        D[i][j] = new_str
+        if D[i][j] in "aoieuyAOIEUY":
+            D[i][j] = '.'
     
 
 print("Итоговая матрица D: ")

@@ -28,6 +28,7 @@ while True:
 
 matrix = [[[0] * x for _ in range(y)] for _ in range(z)]
 
+# Ввод
 for i in range(z):
     for j in range(y):
         for k in range(x):
