@@ -2,7 +2,7 @@
 # программу для вычисления приближённого значения интеграла
 # известной, заданной в программе, функции двумя разными методами:
 # срединных прямоугольников u парабол
-from typing import Callable, Tuple
+from typing import Callable, Tuple, List
 
 def f(x: float) -> float:
     """
@@ -116,7 +116,7 @@ def inputIsFloat(input_str: str) -> [float, bool]:
     return number, True    # Выход
 
 
-def inputIsInt(input_str: str) -> (int, bool):
+def inputIsInt(input_str: str) -> [int, bool]:
     """
     Возвращает (число, True) если оно является int,
     иначе возвращает (0, False)
@@ -139,18 +139,16 @@ def inputFloat(inputMsg: str) -> float:
         print("Введенное значение должно быть числом!")
 
 
-def inputEvenInt(inputMsg: str) -> int:
+def inputInt(inputMsg: str) -> int:
     """
-    Ввод четного целого числа
+    Ввод натурального числа
     """
     while True:
         number, validated = inputIsInt(input(inputMsg))
         if validated:
-            if number % 2 == 0:
-                return number 
-            print("Введенное значение должно быть четным!")
-            continue
-        print("Введенное значение должно быть целым числом!")
+            if number >= 0:
+                return number
+        print("Введенное значение должно быть натуральным числом!")
 
 
 def intergalUsingParabolaMethod(start: float, end: float,
@@ -202,79 +200,41 @@ def compareIntegrals(it1: float, it2: float) -> Tuple[float, float]:
         return abs(it2 - it1), -1
     return abs(it2 - it1), abs(1 - (it1 / it2))
 
-
-def printTable(rectangleIntegrals: Tuple[float, float],
-               trapezeIntegrals: Tuple[float, float],
-               n1: int, n2: int) -> None:
-    print("-"*107)
-    print(f"|{'Таблица вычисленных интегралов':^105}|")
     
-    print("|" + "-"*105 + "|")
-    print(f"|{'Кол-во участков разбиения':^35}|", end="")
-    for n in n1, n2:
-        print(f"{n:^34}|", end="")
-    print("\n|" + "-"*105 + "|")
-    
-    print(f"|{'Метод срединных прямоугольников':^35}|", end="")
-    for integral in rectangleIntegrals:
-        print(f"{integral:^34.5g}|", end="")
-    print("\n|" + "-"*105 + "|")
-    
-    print(f"|{'Метод парабол':^35}|", end="")
-    for integral in trapezeIntegrals:
-        print(f"{integral:^34.5g}|", end="")
-    print("\n" + "-"*107)
-    
-    
-def printInaccuraciesTable(rectangleMethodInaccuracies: Tuple[float, float],
-                           parabolaMethodInaccuracies: Tuple[float, float],
-                           n1: int, n2: int, absolute: bool=True) -> None:
+def printTable(heading: str, *a: List[str]) -> None:
     """
-    Выводит таблицу абсолютных погрешностей если absolute=True,
-    иначе выводит таблицу относительных погрешностей
+    Выводит таблицу вида:
+    -----------------------------------------------------------------------------------------------------------
+    |                                                   name                                                  |
+    |---------------------------------------------------------------------------------------------------------|
+    |              a[0][0]              |             a[0][1]              |             a[0][2]              |
+    |---------------------------------------------------------------------------------------------------------|
+    |              a[1][0]              |             a[1][1]              |             a[1][2]              |
+    |---------------------------------------------------------------------------------------------------------|
+    |                ...                |               ...                |               ...                |
+    |---------------------------------------------------------------------------------------------------------|
+    |              a[n][0]              |             a[n][1]              |             a[n][2]              |
+    -----------------------------------------------------------------------------------------------------------
     """
-    if absolute:
-        heading = "Таблица абсолютных погрешностей"
-    else:
-        heading = "Таблица относительных погрешностей"
-        
     print("-"*107)
     print(f"|{heading:^105}|")
+    print("-"*107)
     
-    print("|" + "-"*105 + "|")
-    print(f"|{'Кол-во участков разбиения':^35}|", end="")
-    for n in n1, n2:
-        print(f"{n:^34}|", end="")
-        
-    print("\n|" + "-"*105 + "|")
-    
-    print(f"|{'Метод срединных прямоугольников':^35}|", end="")
-    for inacc in rectangleMethodInaccuracies:
-        if absolute:
-            print(f"{inacc[0]:^34.5g}|", end="")
-        else:
-            print(f"{inacc[1]:^34.1%}|", end="")
-    print("\n|" + "-"*105 + "|")
-    
-    print(f"|{'Метод парабол':^35}|", end="")
-    for inacc in parabolaMethodInaccuracies:
-        if absolute:
-            print(f"{inacc[0]:^34.5g}|", end="")
-        else:
-            print(f"{inacc[1]:^34.1%}|", end="")
-    print("\n" + "-"*107)
+    for i in range(len(a)):
+        print(f"|{a[i][0]:^35}|", end="")
+        print(f"{a[i][1]:^34}|", end="")
+        print(f"{a[i][2]:^34}|", end="")
+        if i != len(a) - 1:
+            print('\n' + "-"*107)
+    print('\n' + "-"*107)
     
 
-def correctIntegral(method: str, start: float, end: float, eps: float) -> Tuple[float, int]:
+def correctIntegral(integralFunc: Callable, start: float, end: float, eps: float) -> Tuple[float, int]:
     """
     Узнает количество итераций для вычисления интеграла с заданной точностью
     Принимает два метода: 'Метод парабол' и 'Метод срединных прямоугольников'
     """
     n = 2
-    if method == 'Метод парабол':
-        integralFunc = intergalUsingParabolaMethod
-    else:
-        integralFunc = integralUsingMiddleSquareMethod
     integral = integralFunc(start, end, n)
     doubledIntegral = integralFunc(start, end, n * 2)
     while True:
@@ -301,55 +261,83 @@ def inputStartAndEnd() -> Tuple[float, float]:
         if end > start:
             return start, end
         print("Ошибка! Конец отрезка интегрирования должне быть больше начала!")
+        
+def detectWorseMethod(rectInaccuracies: Tuple[Tuple[float]],
+                      parabolaInaccuracies: Tuple[Tuple[float]]) -> [Callable, str]:
+    if parabolaInaccuracies[0][0] == '-':
+        if parabolaInaccuracies[1][0] == '-':
+            return integralUsingMiddleSquareMethod, "Метод срединных прямоугольников"
+        if rectInaccuracies[1][0] > parabolaInaccuracies[1][0]:
+            return integralUsingMiddleSquareMethod, "Метод срединных прямоугольников"
+        else:
+            return intergalUsingParabolaMethod, "Метод парабол"
+    if min(rectInaccuracies[0][0], rectInaccuracies[1][0]) < min(
+        parabolaInaccuracies[0][0], parabolaInaccuracies[1][0]):
+        return integralUsingMiddleSquareMethod, "Метод срединных прямоугольников"
+    return intergalUsingParabolaMethod, "Метод парабол"
 
 
 def main():
     start, end = inputStartAndEnd()
-    # Метод парабол не работает при нечетных n => запросим только четные n
-    n1, n2 = inputEvenInt("Введите N1: "), inputEvenInt("Введите N2: ")
+    n1, n2 = inputInt("Введите N1: "), inputInt("Введите N2: ")
     eps = inputFloat("Введите погрешность: ")
     
+    # Расчитаем интегралы, используя разные методы
     trueIntegral = integralUsingNewtonLeibnizMethod(F, start, end)
+    # rectanglesIntegrals и parabolaIntegrals
+    # представляют собой вид (интеграл при n1, интеграл при n2)
     rectanglesIntegrals = (integralUsingMiddleSquareMethod(start, end, n1),
                           integralUsingMiddleSquareMethod(start, end, n2))
-    parabolaIntegrals = (intergalUsingParabolaMethod(start, end, n1),
-                       intergalUsingParabolaMethod(start, end, n2))
+    parabolaIntegrals = (intergalUsingParabolaMethod(start, end, n1) if n1 % 2 == 0 else '-',
+                       intergalUsingParabolaMethod(start, end, n2) if n2 % 2 == 0 else '-')
     
-    printTable(rectanglesIntegrals, parabolaIntegrals, n1, n2)
+    heading = "Таблица вычисленных интегралов"
+    printTable(heading, ["Кол-во участков разбиения", str(n1), str(n2)],
+               
+               ["Метод срединных прямоугольников",
+                f"{rectanglesIntegrals[0]:.5g}", f"{rectanglesIntegrals[1]:.5g}"],
+               
+               ["Метод парабол",
+                parabolaIntegrals[0] if n1 % 2 == 0 else '-',
+                parabolaIntegrals[1] if n2 % 2 == 0 else '-'])
     
+    # rectanglesMethodInaccuracies и parabolaMethodInaccuracies
+    # предсталяют собой (absolute, rel) при n1, (absolute, rel) при n2
     rectanglesMethodInaccuracies = (compareIntegrals(rectanglesIntegrals[0], trueIntegral),
                                        compareIntegrals(rectanglesIntegrals[1], trueIntegral))
-    parabolaMethodInaccuracies = (compareIntegrals(parabolaIntegrals[0], trueIntegral),
-                                     compareIntegrals(parabolaIntegrals[1], trueIntegral))
+    parabolaMethodInaccuracies = (compareIntegrals(parabolaIntegrals[0], trueIntegral) if n1 % 2 == 0 else ('-', '-'),
+                                     compareIntegrals(parabolaIntegrals[1], trueIntegral) if n2 % 2 == 0 else ('-', '-'))
+    
+    # Выводим таблицу абсолютных погрешностей
+    heading = "Таблица абсолютных погрешностей"
+    printTable(heading, ["Кол-во участков разбиения", str(n1), str(n2)],
+               
+               ["Метод срединных прямоугольников",
+                f"{rectanglesMethodInaccuracies[0][0]:.5g}", f"{rectanglesMethodInaccuracies[0][1]:.5g}"],
+               
+               ["Метод парабол",
+                f"{parabolaMethodInaccuracies[0][0]:.5g}" if n1 % 2 == 0 else '-',
+                f"{parabolaMethodInaccuracies[1][0]:.5g}" if n2 % 2 == 0 else '-'])
+    
+    worseMethodFunc, worseMethod = detectWorseMethod(rectanglesMethodInaccuracies,
+                                      parabolaMethodInaccuracies)
+    
+    correctedIntegral, n3 = correctIntegral(worseMethodFunc, start, end, eps)
     
     if rectanglesMethodInaccuracies[1][1] == -1 or rectanglesMethodInaccuracies[0][1] == -1 or\
         parabolaMethodInaccuracies[1][1] == -1 or parabolaMethodInaccuracies[0][1] == -1:
-        
-        if min(rectanglesMethodInaccuracies[0][0], rectanglesMethodInaccuracies[1][0]) < min(
-            parabolaMethodInaccuracies[0][0], parabolaMethodInaccuracies[1][0]):
-            worseMethod = "Метод парабол"
-        else:
-            worseMethod = "Метод срединных прямоугольников"
-        
-        correctedIntegral, n3 = correctIntegral(worseMethod, start, end, eps)
-        printInaccuraciesTable(rectanglesMethodInaccuracies,
-                                    parabolaMethodInaccuracies,
-                                    n1, n2, True)
         print("Невозможно вычислить относительные погрешности!")
     else:
-        if min(rectanglesMethodInaccuracies[0][0], rectanglesMethodInaccuracies[1][0]) < min(
-            parabolaMethodInaccuracies[0][0], parabolaMethodInaccuracies[1][0]):
-            worseMethod = "Метод парабол"
-        else:
-            worseMethod = "Метод срединных прямоугольников"
+        heading = 'Таблица относительных погрешностей'
+        printTable(heading, ["Кол-во участков разбиения", str(n1), str(n2)],
+                ["Метод срединных прямоугольников",
+                    f"{rectanglesMethodInaccuracies[0][1]:.5g}",
+                    f"{rectanglesMethodInaccuracies[1][1]:.5g}"],
+                ["Метод парабол",
+                    f"{parabolaMethodInaccuracies[0][1]:.5g}" if n1 % 2 == 0 else '-',
+                    f"{parabolaMethodInaccuracies[1][1]:.5g}" if n2 % 2 == 0 else '-'])
         
-        correctedIntegral, n3 = correctIntegral(worseMethod, start, end, eps)
-    
-    
-        for absolute in True, False:
-            printInaccuraciesTable(rectanglesMethodInaccuracies,
-                                    parabolaMethodInaccuracies,
-                                    n1, n2, absolute)
+        
     
     printCorrectedIntegral(correctedIntegral, n3, eps, worseMethod)
     
