@@ -4,18 +4,20 @@
 # срединных прямоугольников u парабол
 from typing import Callable, Tuple, List
 
+from math import log
+
 def f(x: float) -> float:
     """
     Фунцкия f(x)
     """
-    return x**3
+    return log(x)
 
 
 def F(x: float) -> float:
     """
     Первообразная функция для f(x)
     """
-    return x**4/4
+    return x*(log(x) - 1)
 
 
 def integralUsingNewtonLeibnizMethod(primitiveFunc: Callable, start: float, end: float) -> float:
@@ -156,9 +158,6 @@ def intergalUsingParabolaMethod(start: float, end: float,
     """
     Вычисление интеграла с помощью метода парабол ( формулы Котеса )
     """
-    if n % 2 != 0:
-        return -1
-    
     integral = f(start) + f(end)
     
     x = start
@@ -258,9 +257,7 @@ def printCorrectedIntegral(integral: float, n: int, eps: float, method: str) -> 
 def inputStartAndEnd() -> Tuple[float, float]:
     while True:
         start, end = inputFloat("Введите старт: "), inputFloat("Введите конец: ")
-        if end > start:
-            return start, end
-        print("Ошибка! Конец отрезка интегрирования должне быть больше начала!")
+        return start, end
         
 def detectWorseMethod(rectInaccuracies: Tuple[Tuple[float]],
                       parabolaInaccuracies: Tuple[Tuple[float]]) -> [Callable, str]:
@@ -271,7 +268,14 @@ def detectWorseMethod(rectInaccuracies: Tuple[Tuple[float]],
             return integralUsingMiddleSquareMethod, "Метод срединных прямоугольников"
         else:
             return intergalUsingParabolaMethod, "Метод парабол"
-    if min(rectInaccuracies[0][0], rectInaccuracies[1][0]) < min(
+    if parabolaInaccuracies[1][0] == '-':
+        if parabolaInaccuracies[0][0] == '-':
+            return integralUsingMiddleSquareMethod, "Метод срединных прямоугольников"
+        if rectInaccuracies[0][0] > parabolaInaccuracies[0][0]:
+            return integralUsingMiddleSquareMethod, "Метод срединных прямоугольников"
+        else:
+            return intergalUsingParabolaMethod, "Метод парабол"
+    if min(rectInaccuracies[0][0], rectInaccuracies[1][0]) > min(
         parabolaInaccuracies[0][0], parabolaInaccuracies[1][0]):
         return integralUsingMiddleSquareMethod, "Метод срединных прямоугольников"
     return intergalUsingParabolaMethod, "Метод парабол"
@@ -280,7 +284,6 @@ def detectWorseMethod(rectInaccuracies: Tuple[Tuple[float]],
 def main():
     start, end = inputStartAndEnd()
     n1, n2 = inputInt("Введите N1: "), inputInt("Введите N2: ")
-    eps = inputFloat("Введите погрешность: ")
     
     # Расчитаем интегралы, используя разные методы
     trueIntegral = integralUsingNewtonLeibnizMethod(F, start, end)
@@ -313,7 +316,7 @@ def main():
     printTable(heading, ["Кол-во участков разбиения", str(n1), str(n2)],
                
                ["Метод срединных прямоугольников",
-                f"{rectanglesMethodInaccuracies[0][0]:.5g}", f"{rectanglesMethodInaccuracies[0][1]:.5g}"],
+                f"{rectanglesMethodInaccuracies[0][0]:.5g}", f"{rectanglesMethodInaccuracies[1][0]:.5g}"],
                
                ["Метод парабол",
                 f"{parabolaMethodInaccuracies[0][0]:.5g}" if n1 % 2 == 0 else '-',
@@ -321,8 +324,6 @@ def main():
     
     worseMethodFunc, worseMethod = detectWorseMethod(rectanglesMethodInaccuracies,
                                       parabolaMethodInaccuracies)
-    
-    correctedIntegral, n3 = correctIntegral(worseMethodFunc, start, end, eps)
     
     if rectanglesMethodInaccuracies[1][1] == -1 or rectanglesMethodInaccuracies[0][1] == -1 or\
         parabolaMethodInaccuracies[1][1] == -1 or parabolaMethodInaccuracies[0][1] == -1:
@@ -337,8 +338,8 @@ def main():
                     f"{parabolaMethodInaccuracies[0][1]:.5g}" if n1 % 2 == 0 else '-',
                     f"{parabolaMethodInaccuracies[1][1]:.5g}" if n2 % 2 == 0 else '-'])
         
-        
-    
+    eps = inputFloat("Введите погрешность: ")
+    correctedIntegral, n3 = correctIntegral(worseMethodFunc, start, end, eps)
     printCorrectedIntegral(correctedIntegral, n3, eps, worseMethod)
     
 if __name__ == '__main__':
