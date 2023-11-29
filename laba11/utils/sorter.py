@@ -3,7 +3,7 @@ from utils.timer_ import timer
 @timer
 def gnome_sort(lst: list, reverse=False) -> [int, list]:
     """
-    Сортирует список методом гнимьей сортировки
+    Сортирует список методом гномьей сортировки
     """
     countShifts = 0
     n, i = len(lst), 1
