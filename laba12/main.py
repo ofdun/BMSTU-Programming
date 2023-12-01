@@ -19,19 +19,20 @@ def main():
                 printText(newText)
             case 4:
                 wordToReplace = input("Введите слово для удаления: ")
-                newText = replaceSubstringInText(text, wordToReplace, "")
-                printText(newText)
+                text = replaceSubstringInText(text, wordToReplace, "")
+                printText(text)
             case 5:
                 wordToReplace = input("Введите слово для замены: ")
                 replacementWord = input("Введите слово, которым надо заменить: ")
-                newText = replaceSubstringInText(text, wordToReplace, replacementWord)
-                printText(newText)
+                text = replaceSubstringInText(text, wordToReplace, replacementWord)
+                printText(text)
             case 6:
-                newText = multiplyOrDivideInText(text)
-                printText(newText)
+                text = multiplyOrDivideInText(text)
+                printText(text)
             case 7:
                 sentenceToDelete, sentenceNumber = findSentenceWithLeastWords(text)
                 print(f"Предложение, с наименьшим количеством слов: {sentenceToDelete}")
+                # TODO: text = deleteSentence(sentenceNumber)
                 printText(text, ignore=sentenceNumber)
             case 0:
                 exit(0)
