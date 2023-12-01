@@ -1,6 +1,7 @@
 from utils.io import inputText, getUsersChoiceFromMenu, printText
 from utils.actions import (allignLeft, allignRight,
-    allignWidth, replaceSubstringInText, findSentenceWithLeastWords)
+    allignWidth, replaceSubstringInText, findSentenceWithLeastWords,
+    multiplyOrDivideInText)
 
 def main():
     text = inputText()
@@ -26,14 +27,14 @@ def main():
                 newText = replaceSubstringInText(text, wordToReplace, replacementWord)
                 printText(newText)
             case 6:
-                ...
+                newText = multiplyOrDivideInText(text)
+                printText(newText)
             case 7:
-                # TOFIX delete from sentence, not line
-                sentenceToDelete, index = findSentenceWithLeastWords(text)
+                sentenceToDelete, sentenceNumber = findSentenceWithLeastWords(text)
                 print(f"Предложение, с наименьшим количеством слов: {sentenceToDelete}")
-                printText(text, ignore=index)
-            case 8:
-                exit()
+                printText(text, ignore=sentenceNumber)
+            case 0:
+                exit(0)
         
         
 if __name__ == '__main__':

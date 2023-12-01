@@ -1,7 +1,7 @@
 from utils.exceptions import FloatError, NotInMenuError
 
 def inputText() -> list[str]:
-    with open("laba12/input.txt") as f:     
+    with open("laba12/input.txt", encoding="UTF-8") as f:     
         lines = f.read()
     text = lines.split('\n')
     return text
@@ -24,9 +24,6 @@ def validateInput(prompt, start, end) -> int:
         
 
 def getUsersChoiceFromMenu() -> int:
-    """
-    
-    """
     prompt = ("""\nМеню:
 1. Выровнять текст по левому краю
 2. Выровнять текст по правому краю
@@ -35,15 +32,22 @@ def getUsersChoiceFromMenu() -> int:
 5. Замена одного слова другим во всем тексте
 6. ...
 7. Самое короткое предложение по кол-ву слов
-8. Выход\n""")
+0. Выход\n""")
     print(prompt)
-    res = validateInput("Выберите пункт меню: ", 1, 8)
+    res = validateInput("Выберите пункт меню: ", 0, 7)
     return res
 
 
 def printText(text: list[str], ignore: int = -1) -> None:
     print()
-    for i, line in enumerate(text):
-        if i != ignore:
-            print(line)
-    print()
+    string = ""
+    sentenceIndex = 1
+    for line in text:
+        for c in line:
+            if c == ".":
+                sentenceIndex += 1
+            if sentenceIndex != ignore:
+                string += c
+        if sentenceIndex != ignore:
+            string += '\n'
+    print(string)
