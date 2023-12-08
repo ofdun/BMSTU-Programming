@@ -191,10 +191,12 @@ def deleteSentence(text: list[str], sentenceNumber: int) -> list[str]:
     sentenceIndex = 1
     for line in text:
         for i, c in enumerate(line):
-            if c in ".?!" and i != 0 and line[i - 1] != '.':
-                sentenceIndex += 1
             if sentenceIndex != sentenceNumber:
                 string += c
+            if c in ".?!"\
+                and (i == len(line) - 1\
+                    or i != len(line) - 1 and line[i + 1] != '.'):
+                sentenceIndex += 1
         if sentenceIndex != sentenceNumber:
             newText.append(string)
             string = ""

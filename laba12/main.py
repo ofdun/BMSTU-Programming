@@ -16,10 +16,10 @@ from utils.actions import (replaceSubstringInText, findSentenceWithLeastWords,
 
 def main():
     # Ввод текста
-    FORMAT_MODES = {1: alignLeft, 2: alignRight, 3: alignWidth}
+    ALIGN_MODES = {1: alignLeft, 2: alignRight, 3: alignWidth}
     text = inputText()
     align = 1
-    printText(FORMAT_MODES[align](text))
+    printText(ALIGN_MODES[align](text))
     while True:
         # Получение ответа от меню
         response = getUsersChoiceFromMenu()
@@ -27,39 +27,39 @@ def main():
             case 1:
                 # Выравнивание по левому краю
                 align = 1
-                printText(FORMAT_MODES[align](text))
+                printText(ALIGN_MODES[align](text))
             case 2:
                 # Выравнивание по правому краю
                 align = 2
-                printText(FORMAT_MODES[align](text))
+                printText(ALIGN_MODES[align](text))
             case 3:
                 # Выравнивание по ширине
                 align = 3
-                printText(FORMAT_MODES[align](text))
+                printText(ALIGN_MODES[align](text))
             case 4:
                 # Удаляем вхождения введенного слова
                 wordToReplace = input("Введите слово для удаления: ")
                 text = replaceSubstringInText(text, wordToReplace, "")
-                printText(FORMAT_MODES[align](text))
+                printText(ALIGN_MODES[align](text))
             case 5:
                 # Заменяем вхождения слова на другое
                 wordToReplace = input("Введите слово для замены: ")
                 replacementWord = input("Введите слово, которым надо заменить: ")
                 text = replaceSubstringInText(text, wordToReplace, replacementWord)
-                printText(FORMAT_MODES[align](text))
+                printText(ALIGN_MODES[align](text))
             case 6:
                 # Делаем мат. действия в тексте
                 text = multiplyOrDivideInText(text)
-                printText(FORMAT_MODES[align](text))
+                printText(ALIGN_MODES[align](text))
             case 7:
                 # Удаляем предложение с наим. кол-вом слово
                 sentenceToDelete, sentenceNumber = findSentenceWithLeastWords(text)
                 print(f"Предложение, с наименьшим количеством слов: {sentenceToDelete}")
                 text = deleteSentence(text, sentenceNumber)
-                if text[0] == '.':
+                if text[0] == '':
                     print("Предложений не осталось")
                     exit(1)
-                printText(FORMAT_MODES[align](text))
+                printText(ALIGN_MODES[align](text))
             case 0:
                 # Выход из программы
                 break

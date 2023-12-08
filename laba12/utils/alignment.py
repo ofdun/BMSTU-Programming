@@ -1,10 +1,5 @@
 def alignLeft(text: list[str]) -> list[str]:
     text = reduceSpaces(text)
-    # for line in text:
-    #     stringToPrint = ""
-    #     for c in line:
-    #         stringToPrint += c
-    #     newText.append(stringToPrint)
     
     return text
 
@@ -64,12 +59,12 @@ def reduceSpaces(text: list[str]) -> list[str]:
     for line in text:
         string = ""
         wasSpace = False
-        for c in line:
+        for i, c in enumerate(line):
             if c == ' ':
                 wasSpace = True
             else:
                 if wasSpace:
-                    string += ' ' + c
+                    string += ' ' + c if string else c
                     wasSpace = False
                 else:
                     string += c
