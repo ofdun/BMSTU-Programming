@@ -11,7 +11,9 @@ def replaceSubstringInText(text: list[str],
         helpString = ""
         pointer = 0
         while pointer != len(line):
-            if line[pointer] == subString[0]:
+            if line[pointer] == subString[0]\
+                and not(pointer != 0 and line[pointer - 1].isalpha())\
+                    and not(pointer + len(subString) < len(line) and line[pointer + len(subString)].isalpha()):
                 breaked = False
                 helpString = subString[0]
                 for i in range(1, len(subString)):
@@ -22,9 +24,9 @@ def replaceSubstringInText(text: list[str],
                     helpString += line[pointer]
                 if not breaked:
                     newLine += replacementString
-                    pointer += 1
                 if breaked:
                     newLine += helpString
+                pointer += 1
             if pointer != len(line):
                 newLine += line[pointer]
                 pointer += 1
@@ -45,8 +47,8 @@ def findSentenceWithLeastWords(text: list[str]) -> [str, int]:
     for line in text:
         for word in line.split():
             words += 1
-            if word[-1] == '.':
-                sentence += f"{word}."
+            if word[-1] in '.?!' and len(word) != 1:
+                sentence += f"{word}"
                 if words < minWords:
                     minWords = words
                     shortestSentence = sentence
@@ -59,6 +61,22 @@ def findSentenceWithLeastWords(text: list[str]) -> [str, int]:
     if words < minWords:
         minWords = words
     return shortestSentence, shortestSentenceIndex
+
+
+def splitByNumbers(string: str) -> list[str]:
+    lst = []
+    wasNumber = False
+    for c in string:
+        if c.isdigit():
+            wasNumber = True
+        else:
+            if wasNumber:
+                lst.append('')
+                wasNumber = False
+            lst.append(c)
+    if wasNumber:
+        lst.append('')
+    return lst
 
 
 def validateMathString(mathString: str) -> bool:
@@ -92,7 +110,6 @@ def getMathString(line: str, pointer: int) -> [str, bool]:
     valid = validateMathString(mathString)
     if not valid:
         return "", 0, False
-
     return mathString, pointer - defaultPointer, True
 
 
@@ -122,7 +139,8 @@ def evalMathString(mathString: str) -> [float, bool]:
                     if string == '0':
                         return 0, False
                     numbers.append(1/float(string))
-                numbers.append(float(string))
+                else:
+                    numbers.append(float(string))
                 string = ""
             isDivisor = c == '/'
         else:
@@ -138,7 +156,6 @@ def evalMathString(mathString: str) -> [float, bool]:
         return 0, False
     
     res = product(numbers)
-    print(res)
     return res, True
 
 
@@ -159,7 +176,7 @@ def multiplyOrDivideInText(text: list[str]) -> list[str]:
                     if exists:
                         pointer += offset
             if exists:
-                string += f"{res:.5g}"
+                string += f"{res:.5g} "
             else:
                 string += c
             pointer += 1
@@ -173,8 +190,8 @@ def deleteSentence(text: list[str], sentenceNumber: int) -> list[str]:
     string = ""
     sentenceIndex = 1
     for line in text:
-        for c in line:
-            if c in ".?!":
+        for i, c in enumerate(line):
+            if c in ".?!" and i != 0 and line[i - 1] != '.':
                 sentenceIndex += 1
             if sentenceIndex != sentenceNumber:
                 string += c

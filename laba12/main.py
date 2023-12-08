@@ -8,45 +8,49 @@
 # 6. Вычисление арифметических выражений над целыми числами внутри текста
 # (по варианту).
 # 7. Найти (вывести на экран) и затем удалить слово или предложение по варианту.
+
 from utils.io import inputText, getUsersChoiceFromMenu, printText
-from utils.allignment import allignLeft, allignRight,allignWidth
+from utils.alignment import alignLeft, alignRight, alignWidth
 from utils.actions import (replaceSubstringInText, findSentenceWithLeastWords,
     multiplyOrDivideInText, deleteSentence)
 
 def main():
     # Ввод текста
+    FORMAT_MODES = {1: alignLeft, 2: alignRight, 3: alignWidth}
     text = inputText()
+    align = 1
+    printText(FORMAT_MODES[align](text))
     while True:
         # Получение ответа от меню
         response = getUsersChoiceFromMenu()
         match response:
             case 1:
                 # Выравнивание по левому краю
-                newText = allignLeft(text)
-                printText(newText)
+                align = 1
+                printText(FORMAT_MODES[align](text))
             case 2:
                 # Выравнивание по правому краю
-                newText = allignRight(text)
-                printText(newText)
+                align = 2
+                printText(FORMAT_MODES[align](text))
             case 3:
                 # Выравнивание по ширине
-                newText = allignWidth(text)
-                printText(newText)
+                align = 3
+                printText(FORMAT_MODES[align](text))
             case 4:
                 # Удаляем вхождения введенного слова
                 wordToReplace = input("Введите слово для удаления: ")
                 text = replaceSubstringInText(text, wordToReplace, "")
-                printText(text)
+                printText(FORMAT_MODES[align](text))
             case 5:
                 # Заменяем вхождения слова на другое
                 wordToReplace = input("Введите слово для замены: ")
                 replacementWord = input("Введите слово, которым надо заменить: ")
                 text = replaceSubstringInText(text, wordToReplace, replacementWord)
-                printText(text)
+                printText(FORMAT_MODES[align](text))
             case 6:
                 # Делаем мат. действия в тексте
                 text = multiplyOrDivideInText(text)
-                printText(text)
+                printText(FORMAT_MODES[align](text))
             case 7:
                 # Удаляем предложение с наим. кол-вом слово
                 sentenceToDelete, sentenceNumber = findSentenceWithLeastWords(text)
@@ -55,10 +59,10 @@ def main():
                 if text[0] == '.':
                     print("Предложений не осталось")
                     exit(1)
-                printText(text)
+                printText(FORMAT_MODES[align](text))
             case 0:
                 # Выход из программы
-                exit(0)
+                break
         
         
 if __name__ == '__main__':
