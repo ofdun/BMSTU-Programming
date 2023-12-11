@@ -15,7 +15,7 @@ def main():
             case 0:
                 break
             case 1:
-                pathToDb = choosePathToDb("Введите путь до базы данных: ")
+                pathToDb, writeable = choosePathToDb("Введите путь до базы данных: ")
             case 2:
                 prompt = "Введите путь, где необходимо инициализировать базу данных: "
                 pathToDb = inputDbPath(prompt)
@@ -26,11 +26,13 @@ def main():
                 else:
                     print("Сначала выберете базу данных для работы! ")
             case 4:
-                if pathToDb:
+                if pathToDb and writeable:
                     animal = inputAnimal()
                     dbWriteLine(pathToDb, animal)
-                else:
+                elif not pathToDb:
                     print("Сначала выберете базу данных для работы! ")
+                else:
+                    print("Нет прав для записи!")
             case 5:
                 if pathToDb:
                     field = inputField()

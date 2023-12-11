@@ -19,15 +19,19 @@ def getIfFileIsReadable(path: str) -> bool:
     return os.access(path, os.R_OK)
 
 
-def chooseWorkingFile(path: str) -> str:
+def getIfFileIsWriteable(path: str) -> bool:
+    return os.access(path, os.W_OK)
+
+
+def chooseWorkingFile(path: str) -> [str, bool]:
     if getIfFileExists(path) and getIfFileIsReadable(path):
-        return path
+        return path, getIfFileIsWriteable(path)
     else:
         if not getIfFileExists(path):
             print("Файл не найден!")
         elif not getIfFileIsReadable(path):
             print("Файл не доступен для чтения!")
-        return ""
+        return "", False
     
 
 def choosePathToDb(prompt: str) -> str:
