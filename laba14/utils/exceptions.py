@@ -4,3 +4,7 @@ class NotInMenu(Exception):
 
 class NotAnInteger(Exception):
     pass
+
+
+class NegativeNumberError(Exception):
+    pass

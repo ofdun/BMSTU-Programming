@@ -1,5 +1,6 @@
 import os, struct
-from utils.exceptions import NotAnInteger, NotInMenu
+from utils.exceptions import NotAnInteger, NotInMenu, NegativeNumberError
+
 
 def printMenu() -> None:
     MENU="""
@@ -14,6 +15,7 @@ def printMenu() -> None:
 0. Завершение программы
 """
     print(MENU)
+    
     
 def getResponse() -> str:
     while True:
@@ -53,23 +55,7 @@ def chooseFile(pathToFile: str) -> [str, bool, bool]:
         return "", False, False
     except PermissionError:
         return pathToFile, False, os.access(pathToFile, os.W_OK)
-
-def writeLine(pathToFile: str, animal: str, height: float, weight: float):
-    # little-endian
-    line = struct.pack("< 24s f f", animal.encode('cp866'), height, weight)
-    with open(pathToFile, "ab") as f:
-        f.write(line)
-    
-
-# def readFile(pathToFile: str) -> None:
-#     with open(pathToFile, 'rb') as file:
-#         while True:
-#             line = file.read(32)
-#             if not line:
-#                 break
-#             decoded = struct.unpack("< 24s f f", line)
-#             animal = decoded[0].decode("cp866")
-#             print(animal, f"{decoded[1]:.5g}", f"{decoded[2]:.5g}")
+        
             
 def printHeader(width: int):
     print("-" * width)
@@ -87,11 +73,109 @@ def printDb(pathToFile: str) -> None:
     with open(pathToFile, "rb") as f:
         while True:
             line = f.read(32)
-            if not line:
+            if len(line) != 32:
                 break
             line = struct.unpack("< 24s f f", line)
-            animal, height, weight = line[0].decode("cp866").strip(), line[1], line[2]
+            animal, height, weight = line[0].rstrip(b"\x00").decode("cp866"), line[1], line[2]
             print(f"|{animal:^38}|",
                   f"{height:^38.5g} |",
                   f"{weight:^38.5g} |", sep="")
             print("-" * WIDTH)
+            
+            
+def chooseField() -> int:
+    while True:
+        field = input("Введите по какому полю искать: Животное(1), Рост(2), Вес(3): ")
+        try:
+            if 1 <= int(field) <= 3:
+                return int(field)
+        except ValueError:
+            print("Введено неверное значение! ")
+        else:
+            print("Введено неверное значение! ")
+
+
+def enterValue(field: int) -> str | float:
+    while True:
+        value = input("Введите значение: ")
+        if field == 1:
+            return value
+        try:
+            return float(value)
+        except ValueError:
+            print("Введенное должно быть числом")
+            
+            
+def findByFieldAndPrint(path: str, field: int, value: float | str):
+    WIDTH = 120
+    printHeader(WIDTH)
+    print("-" * WIDTH)
+    with open(path, "rb") as f:
+        while True:
+            line = f.read(32)
+            if len(line) != 32:
+                break
+            line = struct.unpack("< 24s f f", line)
+            fields = (line[0].rstrip(b"\x00").decode("cp866"), line[1], line[2])
+            if equals(fields[field - 1], value):
+                print(f"|{fields[0]:^38}|",
+                    f"{fields[1]:^38.5g} |",
+                    f"{fields[2]:^38.5g} |", sep="")
+                print("-" * WIDTH)
+                    
+                    
+def equals(obj1: str | float, obj2: str | float):
+    EPS = 1e-5
+    if isinstance(obj1, str):
+        return obj1 == obj2
+    else:
+        return abs(obj1 - obj2) < EPS
+                    
+                    
+def findBy2FieldsAndPrint(path: str, fieldsToFind: [int, int],
+                                     values: [str | float, str | float]):
+    WIDTH = 120
+    printHeader(WIDTH)
+    print("-" * WIDTH)
+    with open(path, 'rb') as f:
+        while True:
+            line = f.read(32)
+            if len(line) != 32:
+                break
+            line = struct.unpack("< 24s f f", line)
+            fields = (line[0].rstrip(b"\x00").decode("cp866"), line[1], line[2])
+            if equals(fields[fieldsToFind[0] - 1], values[0])\
+                and equals(fields[fieldsToFind[1] - 1], values[1]):
+                print(f"|{fields[0]:^38}|",
+                    f"{fields[1]:^38.5g} |",
+                    f"{fields[2]:^38.5g} |", sep="")
+                print("-" * WIDTH)
+                
+                
+def inputInt(prompt: str) -> int:
+    while True:
+        value = input(prompt)
+        try:
+            value = float(value)
+            if int(value) == value:
+                if value > 0:
+                    return int(value)
+                else:
+                    raise NegativeNumberError
+            else:
+                raise NotAnInteger
+        except ValueError:
+            print("Введенное значение должно быть числом!")
+        except NotAnInteger:
+            print("Введенное число должно быть целым!")
+        except NegativeNumberError:
+            print("Введенное число должно быть больше 0!")
+            
+
+def inputFloat(prompt: str) -> float:
+    while True:
+        number = input(prompt)
+        try:
+            return float(number)
+        except ValueError:
+            print("Введенное должно быть числом!")
