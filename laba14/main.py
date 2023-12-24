@@ -19,7 +19,7 @@ def main():
             case 0:
                 break
             case 1:
-                os.system("cls")
+                os.system("clear")
                 while True:
                     path = input("Введите путь до файла (q чтобы выйти): ")
                     if path == 'q':
@@ -29,7 +29,7 @@ def main():
                         break
                     print("Этого файла не существует!\n")
             case 2:
-                os.system("cls")
+                os.system("clear")
                 while True:
                     path = input("Введите путь, где необходимо создать файл (q чтобы выйти): ")
                     if path == 'q':
@@ -43,18 +43,16 @@ def main():
                         createFile(path)
                         break
             case 3:
-                os.system("cls")
+                os.system("clear")
                 path, r, _ = chooseFile(path)
-                if path:
-                    if r:
-                        printDb(path)
-                    else:
-                        print("Выбранный файл не доступен для чтения! ")
-                else:
+                if not path:
                     print("Выберете пригодный файл для использования! ")
-                    
+                elif not r:
+                    print("Выбранный файл не доступен для чтения! ")
+                else:
+                    printDb(path)
             case 4:
-                os.system("cls")
+                os.system("clear")
                 path, r, w = chooseFile(path)
                 if not path:
                     print("Выберете пригодный файл для использования! ")
@@ -63,6 +61,7 @@ def main():
                 elif not w:
                     print("Выбранный файл не доступен на запись!")
                 else:
+                    printDb(path)
                     rowIndex = inputInt("Введите номер строки, куда надо вставить запись: ")
                     animal = input("Введите название животного: ")
                     height = inputFloat("Введите рост животного: ")
@@ -70,7 +69,7 @@ def main():
                     insertRowInDb(path, rowIndex, (animal, height, weight))
                     printDb(path)
             case 5:
-                os.system("cls")
+                os.system("clear")
                 path, r, w = chooseFile(path)
                 if not path:
                     print("Выберете пригодный файл для использования! ")
@@ -79,41 +78,42 @@ def main():
                 elif not w:
                     print("Выбранный файл не доступен на запись!")
                 else:
+                    printDb(path)
                     row = inputInt("Введите номер записи, которую надо удалить: ")
                     deleteRowFromDb(path, row)
                     printDb(path)
             case 6:
-                os.system("cls")
+                os.system("clear")
                 path, r, _ = chooseFile(path)
-                if path:
-                    if r:
-                        field = chooseField()
-                        value = enterValue(field)
-                        findByFieldAndPrint(path, field, value)
-                    else:
-                        print("Выбранный файл не доступен для чтения! ")
-                else:
+                if not path:
                     print("Выберете пригодный файл для использования! ")
+                elif not r:
+                    print("Выбранный файл не доступен для чтения! ")
+                else:
+                    field = chooseField()
+                    value = enterValue(field)
+                    findByFieldAndPrint(path, field, value)
+                    
             case 7:
-                os.system("cls")
+                os.system("clear")
                 path, r, _ = chooseFile(path)
-                if path:
-                    if r:
-                        field1 = chooseField()
-                        value1 = enterValue(field1)
-                        while True:
-                            field2 = chooseField()
-                            if field2 == field1:
-                                print("Поля должны быть разными!")
-                                continue
-                            value2 = enterValue(field2)
-                            break
-                        findBy2FieldsAndPrint(path, (field1, field2),
-                                                    (value1, value2))
-                    else:
-                        print("Выбранный файл не доступен для чтения! ")
-                else:
+                if not path:
                     print("Выберете пригодный файл для использования! ")
+                elif not r:
+                    print("Выбранный файл не доступен для чтения! ")
+                else:
+                    field1 = chooseField()
+                    value1 = enterValue(field1)
+                    while True:
+                        field2 = chooseField()
+                        if field2 == field1:
+                            print("Поля должны быть разными!")
+                            continue
+                        value2 = enterValue(field2)
+                        break
+                    findBy2FieldsAndPrint(path, (field1, field2),
+                                                    (value1, value2))
+                    
 
 if __name__ == '__main__':
     main()
